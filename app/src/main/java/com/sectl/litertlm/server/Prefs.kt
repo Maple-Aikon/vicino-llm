@@ -95,7 +95,7 @@ class Prefs(context: Context) {
 
     /** Fallback sampling defaults applied when an HTTP client omits the field. */
     var defaultTemperature: Float
-        get() = sp.getFloat(KEY_DEFAULT_TEMP, 0.8f)
+        get() = sp.getFloat(KEY_DEFAULT_TEMP, 1.0f)
         set(value) { sp.edit().putFloat(KEY_DEFAULT_TEMP, value.coerceIn(0f, 2f)).apply() }
 
     var defaultTopP: Float
@@ -103,7 +103,7 @@ class Prefs(context: Context) {
         set(value) { sp.edit().putFloat(KEY_DEFAULT_TOPP, value.coerceIn(0f, 1f)).apply() }
 
     var defaultTopK: Int
-        get() = sp.getInt(KEY_DEFAULT_TOPK, 40)
+        get() = sp.getInt(KEY_DEFAULT_TOPK, 64)
         set(value) { sp.edit().putInt(KEY_DEFAULT_TOPK, value.coerceIn(1, 200)).apply() }
 
     var defaultMaxTokens: Int
@@ -167,6 +167,13 @@ class Prefs(context: Context) {
         get() = sp.getInt(KEY_WEBSEARCH_MAX, 5)
         set(value) { sp.edit().putInt(KEY_WEBSEARCH_MAX, value.coerceIn(1, 10)).apply() }
 
+    /** Multi-token Prediction (MTP) / Speculative Decoding for Gemma 4.
+     *  Only effective on GPU backend. Provides up to 3× decode speedup.
+     *  Requires model reload to take effect. Default: enabled. */
+    var mtpEnabled: Boolean
+        get() = sp.getBoolean(KEY_MTP_ENABLED, true)
+        set(value) { sp.edit().putBoolean(KEY_MTP_ENABLED, value).apply() }
+
     fun resetSamplingDefaults() {
         sp.edit()
             .remove(KEY_DEFAULT_TEMP)
@@ -193,6 +200,7 @@ class Prefs(context: Context) {
         private const val KEY_WEBSEARCH_MAX = "websearch_max"
         private const val KEY_AUTO_RESTORE_KILLS = "auto_restore_kills"
         private const val KEY_AUTO_RESTORE_TRIPPED = "auto_restore_tripped"
+        private const val KEY_MTP_ENABLED = "mtp_enabled"
 
         /** 3 kills in 5 minutes trips the circuit breaker. Tuned so a single
          *  bad model reload doesn't disable auto-restore, but an actual

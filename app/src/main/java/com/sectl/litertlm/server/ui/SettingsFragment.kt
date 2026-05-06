@@ -42,6 +42,8 @@ class SettingsFragment : Fragment() {
     private lateinit var chipCpu: Chip
     private lateinit var autoRestoreSwitch: MaterialSwitch
     private lateinit var banner: TextView
+    private lateinit var mtpSwitch: MaterialSwitch
+    private lateinit var mtpHint: TextView
 
     private lateinit var sliderTemp: Slider
     private lateinit var sliderTopP: Slider
@@ -103,6 +105,7 @@ class SettingsFragment : Fragment() {
         wirePermissions()
         wireBackendChips()
         wireAutoRestore()
+        wireMtpSwitch()
         wireSecrets()
         wireWebSearch()
         wireSliders()
@@ -121,6 +124,8 @@ class SettingsFragment : Fragment() {
         chipCpu = v.findViewById(R.id.chipCpu)
         autoRestoreSwitch = v.findViewById(R.id.autoRestoreSwitch)
         banner = v.findViewById(R.id.autoRestoreBanner)
+        mtpSwitch = v.findViewById(R.id.mtpSwitch)
+        mtpHint = v.findViewById(R.id.mtpHint)
         sliderTemp = v.findViewById(R.id.sliderTemperature)
         sliderTopP = v.findViewById(R.id.sliderTopP)
         sliderTopK = v.findViewById(R.id.sliderTopK)
@@ -161,7 +166,14 @@ class SettingsFragment : Fragment() {
             } else {
                 LiteRtLmEngine.BackendKind.GPU
             }
+            updateMtpForBackend()
         }
+    }
+
+    private fun updateMtpForBackend() {
+        val isCpu = prefs.backendKind == LiteRtLmEngine.BackendKind.CPU
+        mtpSwitch.isEnabled = !isCpu
+        mtpHint.text = getString(if (isCpu) R.string.mtp_hint_cpu else R.string.mtp_hint)
     }
 
     private fun wireAutoRestore() {
@@ -174,6 +186,17 @@ class SettingsFragment : Fragment() {
             refreshAutoRestoreBanner()
         }
         refreshAutoRestoreBanner()
+    }
+
+    private fun wireMtpSwitch() {
+        val isCpu = prefs.backendKind == LiteRtLmEngine.BackendKind.CPU
+        mtpSwitch.isChecked = prefs.mtpEnabled
+        mtpSwitch.isEnabled = !isCpu
+        mtpHint.text = getString(if (isCpu) R.string.mtp_hint_cpu else R.string.mtp_hint)
+
+        mtpSwitch.setOnCheckedChangeListener { _, isChecked ->
+            prefs.mtpEnabled = isChecked
+        }
     }
 
     private fun refreshAutoRestoreBanner() {
@@ -299,9 +322,9 @@ class SettingsFragment : Fragment() {
 
         resetBtn.setOnClickListener {
             prefs.resetSamplingDefaults()
-            sliderTemp.value = 0.8f
+            sliderTemp.value = 1.0f
             sliderTopP.value = 0.95f
-            sliderTopK.value = 40f
+            sliderTopK.value = 64f
             sliderMaxTok.value = 512f
             refreshSliderLabels()
         }

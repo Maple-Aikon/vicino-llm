@@ -9,6 +9,8 @@ import com.google.ai.edge.litertlm.ConversationConfig
 import com.google.ai.edge.litertlm.Engine
 import com.google.ai.edge.litertlm.EngineConfig
 import com.google.ai.edge.litertlm.SamplerConfig
+import com.google.ai.edge.litertlm.ExperimentalApi
+import com.google.ai.edge.litertlm.ExperimentalFlags
 import kotlinx.coroutines.sync.Mutex
 import kotlinx.coroutines.sync.withLock
 
@@ -34,6 +36,9 @@ class LiteRtLmEngine(
     /** Context window applied at model load. 4096 is a safe default; users
      *  with RAM headroom can raise via Settings up to 32768 (Gemma 4 cap). */
     private val contextWindow: Int = 4096,
+    /** Multi-token Prediction / Speculative Decoding toggle. Only effective
+     *  on GPU backend. Applied at model load; changing requires reload. */
+    private val mtpEnabled: Boolean = true,
 ) : InferenceEngine {
 
     enum class BackendKind { CPU, GPU }
@@ -62,6 +67,7 @@ class LiteRtLmEngine(
     // as the user types) never overlap Conversations.
     private val inferenceMutex = Mutex()
 
+    @OptIn(ExperimentalApi::class)
     override suspend fun load(modelPath: String) {
         if (isLoaded && loadedModelPath == modelPath) {
             Log.i(TAG, "load: same model already loaded — skipping")
@@ -92,6 +98,14 @@ class LiteRtLmEngine(
             maxNumTokens = contextWindow.coerceIn(1024, 32_768),
             maxNumImages = 4,
         )
+
+        // Enable Multi-token Prediction (MTP) / Speculative Decoding for
+        // Gemma 4 — up to 3x decode speedup on GPU. Google announced
+        // official support May 4, 2026. The official .litertlm bundle from
+        // litert-community/gemma-4-E4B-it-litert-lm already includes the
+        // speculative decoding draft head.
+        @OptIn(ExperimentalApi::class)
+        ExperimentalFlags.enableSpeculativeDecoding = mtpEnabled
 
         Log.i(TAG, "load: initialize Engine(backend=$backend, model=$modelPath) — may take 30-60s on S10")
         val t0 = System.currentTimeMillis()

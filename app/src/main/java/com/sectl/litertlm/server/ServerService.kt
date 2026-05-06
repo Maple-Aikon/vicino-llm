@@ -231,6 +231,7 @@ class ServerService : Service() {
                     LiteRtLmEngine(
                         backendKind = backendKind,
                         contextWindow = prefs.contextWindow,
+                        mtpEnabled = prefs.mtpEnabled,
                     ) as InferenceEngine
                 }.getOrElse {
                     Log.e(TAG, "LiteRtLmEngine ctor failed — falling back to stub", it)

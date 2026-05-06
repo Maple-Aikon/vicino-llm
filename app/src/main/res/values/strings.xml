@@ -98,9 +98,9 @@
     <string name="label_max_tokens_fmt">max_tokens: %1$d</string>
     <string name="label_context_window_fmt">context window: %1$d tokens</string>
     <string name="context_window_hint">Applied at model load. Larger = more KV cache RAM. Reload model to change.</string>
-    <string name="sampling_hint_temperature">How creative vs predictable. 0 = always the most likely word (deterministic). 1 = balanced. 2 = very random, can ramble. Start at 0.8.</string>
+    <string name="sampling_hint_temperature">How creative vs predictable. 0 = always the most likely word (deterministic). 1 = balanced. 2 = very random, can ramble. Google recommends 1.0 for Gemma 4.</string>
     <string name="sampling_hint_top_p">Nucleus sampling. Keeps only the smallest set of words whose combined probability ≥ P. Lower = safer, more on-topic. 0.95 is a healthy default.</string>
-    <string name="sampling_hint_top_k">Sample only from the K most-likely words at each step. Lower K = more focused, less variety. 40 is a healthy default.</string>
+    <string name="sampling_hint_top_k">Sample only from the K most-likely words at each step. Lower K = more focused, less variety. Google recommends 64 for Gemma 4.</string>
     <string name="sampling_hint_max_tokens">Cap on the length of each REPLY. Hit it and the model stops mid-sentence with finish_reason=length. Keeps runaway replies short.</string>
     <string name="sampling_hint_context_window">Size of the model\'s working memory (KV cache). Includes full chat history. Larger = longer memory but more RAM. Applied at model LOAD — reload after change.</string>
     <string name="reset_defaults">Reset</string>
@@ -151,4 +151,9 @@
     <string name="perm_banner_text">Some permissions are missing — the server may be unreliable until you grant them.</string>
     <string name="perm_banner_action">Review</string>
     <string name="perm_ok_pill">✓ Permissions OK · tap to review</string>
+
+    <!-- MTP / Speculative Decoding -->
+    <string name="mtp_label">Multi-token Prediction (MTP)</string>
+    <string name="mtp_hint">Speeds up GPU decoding up to 3×. Requires model reload to take effect.</string>
+    <string name="mtp_hint_cpu">MTP requires GPU backend — switch to GPU to enable.</string>
 </resources>

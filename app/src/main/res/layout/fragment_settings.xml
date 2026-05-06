@@ -128,6 +128,22 @@
             android:textSize="11sp"
             android:alpha="0.5" />
 
+        <!-- Multi-token Prediction toggle (GPU only) -->
+        <com.google.android.material.materialswitch.MaterialSwitch
+            android:id="@+id/mtpSwitch"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="14dp"
+            android:text="@string/mtp_label" />
+
+        <TextView
+            android:id="@+id/mtpHint"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="@string/mtp_hint"
+            android:textSize="11sp"
+            android:alpha="0.55" />
+
         <!-- Auto-restore -->
         <com.google.android.material.materialswitch.MaterialSwitch
             android:id="@+id/autoRestoreSwitch"

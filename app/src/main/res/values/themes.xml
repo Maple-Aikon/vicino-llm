@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools">
-    <style name="Theme.GemmaServer" parent="Theme.Material3.DayNight.NoActionBar">
+    <style name="Theme.GemmaServer" parent="Theme.Material3.Dark.NoActionBar">
         <!-- Primary — Material3 dynamic palette falls back to these. -->
         <item name="colorPrimary">@color/gs_primary</item>
         <item name="colorOnPrimary">@color/gs_on_primary</item>
@@ -9,7 +9,9 @@
         <item name="colorSecondary">@color/gs_secondary</item>
         <item name="colorSecondaryContainer">@color/gs_secondary_container</item>
         <item name="colorSurface">@color/gs_surface</item>
+        <item name="colorOnSurface">@color/gs_on_surface</item>
         <item name="colorSurfaceVariant">@color/gs_surface_variant</item>
+        <item name="colorOnSurfaceVariant">@color/gs_on_surface_variant</item>
         <item name="android:windowLightStatusBar" tools:targetApi="m">false</item>
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorSurface</item>
         <item name="android:navigationBarColor">?attr/colorSurface</item>
